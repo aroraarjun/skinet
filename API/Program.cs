@@ -1,5 +1,6 @@
 // Below create an instance(object) of this web application builder with some pre configured defualts
 // So it will configure Kestrel web server(resposible for running web application provided by donet framweork][p=])
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefualtConnection"));
 });
+builder.Services.AddScoped<IProductRepository, ProductRepository> ();
 
 var app = builder.Build();
 
@@ -33,5 +35,20 @@ app.UseAuthorization();
 // through this API knows where to send HTTP request
 // This piece of middleware register controller endpoints so API knows where to send 
 app.MapControllers();
+
+//through using our service will be be disposed once finished executing
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<StoreContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+try
+{
+    await context.Database.MigrateAsync();
+    await StoreContextSeed.SeedAsync(context);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "An error occured during Migration");
+}
 
 app.Run();

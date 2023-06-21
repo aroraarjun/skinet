@@ -32,6 +32,8 @@ app.UseSwaggerUI();
 //From below line now our api server know that beside serving http request it also needs to serve static content
 app.UseStaticFiles();
 
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 // through this API knows where to send HTTP request

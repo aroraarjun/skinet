@@ -17,6 +17,7 @@ namespace API.Extensions
             services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IPaymentService,PaymentService>();
             services.AddScoped<IBasketRepository,BasketRepository>();
 
             services.AddDbContext<StoreContext>(opt =>

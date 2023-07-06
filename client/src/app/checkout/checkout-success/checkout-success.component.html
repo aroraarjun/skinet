@@ -4,5 +4,9 @@
     </div>
     <h1>Than You. Order ho gaya bhai</h1>
     <p class="mb-4">Order Bhej rha hu tension na le</p>
-    <button class="btn btn-outline-success">View your order</button>
+    <button *ngIf="order" routerLink="/orders/{{order.id}}" class="btn btn-outline-success"> 
+        View your current order
+    </button>
+
+    <button  *ngIf="!order" routerLink="/orders" class="btn btn-outline-success">View your orders</button>
 </div>

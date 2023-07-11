@@ -35,6 +35,7 @@ namespace API.Controllers
         //If we we make our below code asynchronous then main thread creates a taskand says that task
         // please go and get me some data, it goes away, meanwhile thread goes pick other request
         //upon completion task notifies main thread about completion -- makes our code more scalable as we can pick more req concurrently
+        [Cached(600)]
         [HttpGet]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
@@ -53,6 +54,7 @@ namespace API.Controllers
                 productParams.PageSize, totalItems, data));
         }
 
+        [Cached(600)]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
@@ -66,6 +68,7 @@ namespace API.Controllers
 
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
+        [Cached(600)]
 
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<ProductBrand>>> GetProductbrands()
@@ -73,6 +76,7 @@ namespace API.Controllers
             return Ok(await _productBrandrepo.ListAllAsync());
         }
 
+        [Cached(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {

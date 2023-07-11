@@ -13,12 +13,15 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)
         {
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<ITokenService,TokenService>();
             services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IPaymentService,PaymentService>();
             services.AddScoped<IBasketRepository,BasketRepository>();
+            //cahcing is singleton as we want it ot ready and available when service starts and shared among all request coming into our api
+            // we don't want it to be scoped to a single request
 
             services.AddDbContext<StoreContext>(opt =>
             {
